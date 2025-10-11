@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giaan46.taskmanager.model.Task;
 import com.giaan46.taskmanager.service.TaskService;
+
+import jakarta.validation.Valid;
 
 
 
@@ -20,35 +23,37 @@ import com.giaan46.taskmanager.service.TaskService;
 @RequestMapping("/api/task")
 
 public class TaskController {
-	
+
 	private final TaskService service;
-	
-	
+
+
 	public TaskController(TaskService service) {
-		
+
 		this.service = service;
 	}
 
-	
+
 	@GetMapping
-	public List<Task> getAll(){
-		return service.getAllTasks();
+	public List<Task> getAll(@RequestParam(required = false) Boolean completed){
+
+		return service.getAllTasks(completed);
 	}
-	@PostMapping 
-	public Task crate(@RequestBody Task task){
+
+	@PostMapping
+	public Task crate(@Valid @RequestBody Task task){
 		return service.createTask(task);
-		
+
 	}
-	
+
 	@PutMapping("/{id}")
-	public Task update(@PathVariable Long id, @RequestBody Task task) {
-		return service.UpdateTask(id, task);
-		
+	public Task update(@PathVariable Long id,@Valid @RequestBody Task task) {
+		return service.updateTask(id, task);
+
 }
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 	service.deleteTask(id);
-	
+
 }
 }
 
