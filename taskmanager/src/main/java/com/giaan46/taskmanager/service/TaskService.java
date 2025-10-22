@@ -1,9 +1,11 @@
 package com.giaan46.taskmanager.service;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.giaan46.taskmanager.model.Task;
@@ -51,13 +53,12 @@ public class TaskService {
 	    return repository.findById(id)
 	            .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
 	}
-	public Page<Task> getAllTaskPaged(Boolean completed, Pageable pageable){
-		if(completed == null) {
-			return repository.findAll(pageable);
-			
-		}else {
-			return repository.findByCompleted(completed,pageable);
-			
-		}
+	public Page<Task> getAllTasksPaged(Boolean completed, Pageable pageable) {
+	    if (completed == null) {
+	        return repository.findAll(pageable);
+	    } else {
+	        return repository.findByCompleted(completed, pageable);
+	    }
 	}
+
 }

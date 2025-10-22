@@ -1,11 +1,9 @@
 package com.giaan46.taskmanager.repository;
 
 import java.util.List;
-
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.giaan46.taskmanager.model.Task;
 
 
@@ -15,11 +13,6 @@ import com.giaan46.taskmanager.model.Task;
 
  
 public interface TaskRepository extends JpaRepository<Task, Long> {
-
-	  List<Task> findByCompleted(Boolean completed);
-	  Page<Task> findByCompleted(Boolean completed, Pageable pageable);
-	  
-
-
-
+    List<Task> findByCompleted(Boolean completed);
+    Page<Task> findByCompleted(Boolean completed, Pageable pageable);
 }
