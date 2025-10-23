@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Tarea</title>
+</head>
+<body>
+<h1 th:text="${task.id == null ? 'Nueva tarea' : 'Editar tarea'}"></h1>
+
+<form th:action="@{/view/save}" th:object="${task}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <label>Título:</label>
+    <input type="text" th:field="*{title}" required><br>
+
+    <label>Descripción:</label>
+    <textarea th:field="*{description}" required></textarea><br>
+
+    <label>Completada:</label>
+    <input type="checkbox" th:field="*{completed}"><br>
+
+    <label>Fecha límite:</label>
+    <input type="date" th:field="*{dueDate}"><br>
+
+    <button type="submit">💾 Guardar</button>
+    <a href="/view">⬅ Volver</a>
+</form>
+</body>
+</html>
+ml>

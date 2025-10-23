@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Gestor de Tareas 📝</h1>
+
+    <section>
+        <h2>Agregar nueva tarea</h2>
+        <form id="taskForm">
+            <input type="text" id="title" placeholder="Título" required>
+            <input type="text" id="description" placeholder="Descripción">
+            <button type="submit">Agregar</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Lista de tareas</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Completada</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="taskTable"></tbody>
+        </table>
+    </section>
+
+    <script>
+        const apiBase = '/api/task';
+
+        async function loadTasks() {
+            const res = await fetch(`${apiBase}/paged?page=0&size=20`);
+            const data = await res.json();
+
+            const tbody = document.getElementById('taskTable');
+            tbody.innerHTML = '';
+
+            data.content.forEach(task => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${task.id}</td>
+                    <td>${task.title}</td>
+                    <td>${task.description || ''}</td>
+                    <td>${task.completed ? '✅' : '❌'}</td>
+                    <td>
+                        <button onclick="toggleStatus(${task.id}, ${!task.completed})">Cambiar estado</button>
+                        <button onclick="deleteTask(${task.id})">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function toggleStatus(id, completed) {
+            await fetch(`${apiBase}/${id}/status?completed=${completed}`, { method: 'PUT' });
+            loadTasks();
+        }
+
+        async function deleteTask(id) {
+            await fetch(`${apiBase}/${id}`, { method: 'DELETE' });
+            loadTasks();
+        }
+
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+
+            await fetch(apiBase, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, completed: false })
+            });
+
+            document.getElementById('taskForm').reset();
+            loadTasks();
+        });
+
+        loadTasks();
+    </script>
+</body>
+</html>
