@@ -18,7 +18,7 @@ import com.giaan46.taskmanager.service.TaskService;
 @RequestMapping("/view")
 
 public class ViewController {
-	
+
 	   @Autowired
 	    private TaskService service;
 

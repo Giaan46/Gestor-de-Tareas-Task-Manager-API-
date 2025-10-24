@@ -1,34 +1,126 @@
+/* === FONDO GENERAL === */
 body {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', 'Segoe UI', Tahoma, sans-serif;
+    background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-h1 {
-    color: #333;
+/* === CONTENEDOR NEÓN === */
+.neon-container {
+    background: rgba(10, 15, 25, 0.9);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+    padding: 40px;
+    width: 400px;
+    backdrop-filter: blur(6px);
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
+.neon-container:hover {
+    box-shadow: 0 0 35px rgba(0, 255, 255, 0.6);
 }
 
-th, td {
-    padding: 10px;
+/* === TÍTULO NEÓN === */
+.neon-title {
+    font-size: 1.8rem;
+    color: #00e6ff;
+    text-shadow: 0 0 10px #00e6ff, 0 0 20px #00e6ff, 0 0 40px #00e6ff;
+    margin-bottom: 30px;
+}
+
+/* === FORMULARIO === */
+.neon-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     text-align: left;
 }
 
-button {
-    margin-right: 5px;
-    cursor: pointer;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    background-color: #4CAF50;
-    color: white;
+.neon-form label {
+    font-weight: 600;
+    color: #7ee6ff;
 }
 
-button:hover {
-    background-color: #45a049;
+.neon-form input[type="text"],
+.neon-form input[type="date"],
+.neon-form textarea {
+    background: transparent;
+    border: 1px solid #00e6ff;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.neon-form input:focus,
+.neon-form textarea:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+textarea {
+    resize: none;
+    height: 80px;
+}
+
+/* === CHECKBOX === */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    accent-color: #00e6ff;
+    width: 18px;
+    height: 18px;
+}
+
+/* === BOTONES NEÓN === */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-glow {
+    background: transparent;
+    border: 2px solid #00e6ff;
+    color: #00e6ff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 8px #00e6ff;
+}
+
+.btn-glow:hover {
+    background: #00e6ff;
+    color: #0b1320;
+    box-shadow: 0 0 20px #00e6ff, 0 0 30px #00ffff;
+    transform: translateY(-2px);
+}
+
+.btn-glow.cancel {
+    border-color: #ff4081;
+    color: #ff4081;
+    text-shadow: 0 0 8px #ff4081;
+}
+
+.btn-glow.cancel:hover {
+    background: #ff4081;
+    color: #0b1320;
+    box-shadow: 0 0 20px #ff4081, 0 0 30px #ff80ab;
 }

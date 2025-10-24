@@ -3,88 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestor de Tareas</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/linkedin.css}">
 </head>
 <body>
-    <h1>Gestor de Tareas 📝</h1>
+<div class="container">
+    <h1>Lista de Tareas</h1>
+    <a href="/view/new" class="btn btn-add">➕ Nueva Tarea</a>
 
-    <section>
-        <h2>Agregar nueva tarea</h2>
-        <form id="taskForm">
-            <input type="text" id="title" placeholder="Título" required>
-            <input type="text" id="description" placeholder="Descripción">
-            <button type="submit">Agregar</button>
-        </form>
-    </section>
-
-    <section>
-        <h2>Lista de tareas</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Completada</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="taskTable"></tbody>
-        </table>
-    </section>
-
-    <script>
-        const apiBase = '/api/task';
-
-        async function loadTasks() {
-            const res = await fetch(`${apiBase}/paged?page=0&size=20`);
-            const data = await res.json();
-
-            const tbody = document.getElementById('taskTable');
-            tbody.innerHTML = '';
-
-            data.content.forEach(task => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${task.id}</td>
-                    <td>${task.title}</td>
-                    <td>${task.description || ''}</td>
-                    <td>${task.completed ? '✅' : '❌'}</td>
-                    <td>
-                        <button onclick="toggleStatus(${task.id}, ${!task.completed})">Cambiar estado</button>
-                        <button onclick="deleteTask(${task.id})">Eliminar</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        async function toggleStatus(id, completed) {
-            await fetch(`${apiBase}/${id}/status?completed=${completed}`, { method: 'PUT' });
-            loadTasks();
-        }
-
-        async function deleteTask(id) {
-            await fetch(`${apiBase}/${id}`, { method: 'DELETE' });
-            loadTasks();
-        }
-
-        document.getElementById('taskForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
-
-            await fetch(apiBase, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description, completed: false })
-            });
-
-            document.getElementById('taskForm').reset();
-            loadTasks();
-        });
-
-        loadTasks();
-    </script>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Fecha Límite</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.id}"></td>
+                <td th:text="${task.title}"></td>
+                <td th:text="${task.description}"></td>
+                <td>
+                    <span th:classappend="${task.completed} ? 'status done' : 'status pending'"
+                          th:text="${task.completed} ? 'Completada' : 'Pendiente'"></span>
+                </td>
+                <td th:text="${task.dueDate}"></td>
+                <td>
+                    <a th:href="@{'/view/edit/' + ${task.id}}" class="btn">Editar</a>
+                    <a th:href="@{'/view/delete/' + ${task.id}}" class="btn danger">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

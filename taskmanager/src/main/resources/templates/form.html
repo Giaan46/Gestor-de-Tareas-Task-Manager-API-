@@ -2,28 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nueva Tarea</title>
+    <title th:text="${task != null && task.id != null ? 'Editar Tarea' : 'Nueva Tarea'}">Gestión de Tareas</title>
+    <link rel="stylesheet" th:href="@{/css/linkedin.css}">
 </head>
 <body>
-<h1 th:text="${task.id == null ? 'Nueva tarea' : 'Editar tarea'}"></h1>
+<div class="container">
+    <h1 th:text="${task != null && task.id != null ? 'Editar Tarea' : 'Nueva Tarea'}"></h1>
 
-<form th:action="@{/view/save}" th:object="${task}" method="post">
-    <input type="hidden" th:field="*{id}">
-    <label>Título:</label>
-    <input type="text" th:field="*{title}" required><br>
+    <form th:action="@{/view/save}" th:object="${task}" method="post" class="task-form">
+        <input type="hidden" th:field="*{id}">
 
-    <label>Descripción:</label>
-    <textarea th:field="*{description}" required></textarea><br>
+        <label>Título:</label>
+        <input type="text" th:field="*{title}" required>
 
-    <label>Completada:</label>
-    <input type="checkbox" th:field="*{completed}"><br>
+        <label>Descripción:</label>
+        <textarea th:field="*{description}" required></textarea>
 
-    <label>Fecha límite:</label>
-    <input type="date" th:field="*{dueDate}"><br>
+        <label>Completada:</label>
+        <input type="checkbox" th:field="*{completed}">
 
-    <button type="submit">💾 Guardar</button>
-    <a href="/view">⬅ Volver</a>
-</form>
+        <label>Fecha límite:</label>
+        <input type="date" th:field="*{dueDate}">
+
+        <div style="margin-top: 15px;">
+            <button type="submit" class="btn btn-add">💾 Guardar</button>
+            <a href="/view" class="btn">⬅ Volver</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>
-ml>
