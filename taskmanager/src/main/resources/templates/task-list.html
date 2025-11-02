@@ -3,40 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tareassssss</title>
+    <title>Lista de Tareas</title>
     <link rel="stylesheet" th:href="@{/css/linkedin.css}">
 </head>
 <body>
 <div class="container">
-    <!-- Encabezado y botón -->
+    <!-- Encabezado -->
     <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h1>Lista de Tareas</h1>
-        <a href="/view/new" class="btn btn-add">➕ Nueva Tarea</a>
+        <a href="/view/new" class="btn btn-add">+ Nueva Tarea</a>
     </div>
 
-    <!-- Tabla de tareas -->
+    <!-- Tabla -->
     <table>
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Estado</th>
-                <th>Fecha Límite</th>
-                <th>Acciones</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha Límite</th>
+            <th>Acciones</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="task : ${tasks}">
-                <td th:text="${task.id}"></td>
-                <td th:text="${task.title}"></td>
-                <td th:text="${task.description}"></td>
-                <td>
-    <span th:classappend="${task.completed} ? 'status done' : 'status pending'"
-          th:text="${task.completed} ? 'Completada' : 'Pendiente'">
-    </span>
-</td>
-<td style="display: flex; gap: 8px;">
-    <a th:href="@{/view/edit/{id}(id=${task.id})}" class="btn">Editar</a>
-    <a th:href="@{/view/delete/{id}(id=${task.id})}" class="btn danger">Eliminar</a>
-</td>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.id}"></td>
+            <td th:text="${task.title}"></td>
+            <td th:text="${task.description}"></td>
+            <td>
+                <span th:classappend="${task.completed} ? 'status done' : 'status pending'"
+                      th:text="${task.completed} ? 'Completada' : 'Pendiente'"></span>
+            </td>
+            <td th:text="${task.dueDate}"></td>
+            <td style="display: flex; gap: 8px;">
+                <a th:href="@{/view/edit/{id}(id=${task.id})}" class="btn">Editar</a>
+                <a th:href="@{/view/delete/{id}(id=${task.id})}" class="btn danger">Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
