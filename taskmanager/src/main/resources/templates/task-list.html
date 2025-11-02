@@ -13,6 +13,11 @@
         <h1>Lista de Tareas</h1>
         <a href="/view/new" class="btn btn-add">+ Nueva Tarea</a>
     </div>
+    <!-- Mensaje de confirmación -->
+<div th:if="${message}" class="alert">
+    <span th:text="${message}"></span>
+</div>
+
 
     <!-- Tabla -->
     <table>

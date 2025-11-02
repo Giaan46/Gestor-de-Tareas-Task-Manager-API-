@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.giaan46.taskmanager.model.Task;
 import com.giaan46.taskmanager.service.TaskService;
@@ -35,8 +36,10 @@ public class ViewController {
 	    }
 
 	    @PostMapping("/save")
-	    public String saveTask(@ModelAttribute Task task) {
+	    public String saveTask(@ModelAttribute Task task, Model model) {
 	        service.createTask(task);
+	        model.addAttribute("message", "Tarea guardada correctamente");
+	        model.addAttribute("tasks", service.getAllTasks(null));
 	        return "redirect:/view";
 	    }
 
@@ -48,8 +51,13 @@ public class ViewController {
 	    }
 
 	    @GetMapping("/delete/{id}")
-	    public String deleteTask(@PathVariable Long id) {
+	    public String deleteTask(@PathVariable("id") Long id, Model model) {
 	        service.deleteTask(id);
+	        model.addAttribute("message", "❌ Tarea eliminada correctamente");
+	        model.addAttribute("tasks", service.getAllTasks(null));
 	        return "redirect:/view";
 	    }
+
+
+	    
 	}

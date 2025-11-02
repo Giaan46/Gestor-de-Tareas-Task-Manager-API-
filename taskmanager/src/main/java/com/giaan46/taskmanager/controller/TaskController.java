@@ -1,104 +1,75 @@
 package com.giaan46.taskmanager.controller;
 
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import jakarta.validation.Valid;
-
-import jakarta.validation.constraints.Size;
-
-
 import com.giaan46.taskmanager.model.Task;
 import com.giaan46.taskmanager.service.TaskService;
 
-
-
 @RestController
 @RequestMapping("/api/task")
-
 public class TaskController {
 
-	private final TaskService service;
+    private final TaskService service;
 
-	public TaskController(TaskService service) {
+    public TaskController(TaskService service) {
+        this.service = service;
+    }
 
-		this.service = service;
-	}
+    @GetMapping
+    public List<Task> getAll(@RequestParam(required = false) Boolean completed) {
+        return service.getAllTasks(completed);
+    }
 
-	@GetMapping
-	public List<Task> getAll(@RequestParam(required = false) Boolean completed) {
+    @PostMapping
+    public Task create(@Valid @RequestBody Task task) {
+        return service.createTask(task);
+    }
 
-		return service.getAllTasks(completed);
-	}
+    @PutMapping("/{id}")
+    public Task update(@PathVariable Long id, @Valid @RequestBody Task task) {
+        return service.updateTask(id, task);
+    }
 
-	@PostMapping
-	public Task crate(@Valid @RequestBody Task task) {
-		return service.createTask(task);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteTask(id);
+    }
 
-	}
+    @PutMapping("/{id}/complete")
+    public Task markAsCompleted(@PathVariable Long id) {
+        Task task = service.getTaskById(id);
+        task.setCompleted(true);
+        return service.updateTask(id, task);
+    }
 
-	@PutMapping("/{id}")
-	public Task update(@PathVariable Long id, @Valid @RequestBody Task task) {
-		return service.updateTask(id, task);
+    @PutMapping("/{id}/status")
+    public Task updateTaskStatus(@PathVariable Long id, @RequestParam Boolean completed) {
+        Task task = service.getTaskById(id);
+        task.setCompleted(completed);
+        return service.updateTask(id, task);
+    }
 
-	}
+    @GetMapping("/paged")
+    public Page<Task> getAllTasksPaged(
+            @RequestParam(required = false) Boolean completed,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id,asc") String[] sort) {
 
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		service.deleteTask(id);
+        String sortField = sort[0];
+        Sort.Direction sortDirection = sort.length > 1 && sort[1].equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
 
-	}
-
-	@PutMapping("/{id}/complete")
-	public Task markAsCompleted(@PathVariable Long id) {
-		Task task = service.getTaskById(id);
-		task.setCompleted(true);
-		return service.updateTask(id, task);
-
-	}
-
-
-	@PutMapping("/{id}/status")
-	public Task updateTaskStatus(
-		@PathVariable Long id,
-		@RequestParam Boolean completed){
-			Task task = service.getTaskById(id);
-			task.setCompleted(completed);
-			return service.updateTask(id, task);
-
-
-
-	}
-	@GetMapping("/paged")
-	public Page<Task> getAllTasksPaged(
-	        @RequestParam(required = false) Boolean completed,
-	        @RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "5") int size,
-	        @RequestParam(defaultValue = "id,asc") String[] sort) {
-
-	    String sortField = sort[0];
-	    Sort.Direction sortDirection = sort.length > 1 && sort[1].equalsIgnoreCase("desc")
-	            ? Sort.Direction.DESC
-	            : Sort.Direction.ASC;
-
-	    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
-
-	    return service.getAllTasksPaged(completed, pageable);
-	}
-
-
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
+        return service.getAllTasksPaged(completed, pageable);
+    }
 }
 
 
